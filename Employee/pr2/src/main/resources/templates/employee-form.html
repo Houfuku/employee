@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${title}">Сотрудник</title>
+</head>
+<body>
+<h1 th:text="${title}">Сотрудник</h1>
+<form th:object="${employee}"
+      th:action="${employee.id == null} ? @{/employees/add} : @{/employees/edit/{id}(id=${employee.id})}"
+      method="post">
+    <div class="row">
+        <label for="fullName">ФИО</label>
+        <input type="text" id="fullName" th:field="*{fullName}">
+        <div class="error" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+    </div>
+    <div class="row">
+        <label for="email">Email</label>
+        <input type="text" id="email" th:field="*{email}">
+        <div class="error" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+    </div>
+    <div class="row">
+        <label for="phone">Телефон</label>
+        <input type="text" id="phone" th:field="*{phone}" placeholder="+79991234567">
+        <div class="error" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+    </div>
+    <div class="row">
+        <label for="position">Должность</label>
+        <input type="text" id="position" th:field="*{position}">
+        <div class="error" th:if="${#fields.hasErrors('position')}" th:errors="*{position}"></div>
+    </div>
+    <div class="row">
+        <label for="salary">Зарплата</label>
+        <input type="number" step="0.01" id="salary" th:field="*{salary}">
+        <div class="error" th:if="${#fields.hasErrors('salary')}" th:errors="*{salary}"></div>
+    </div>
+    <div class="row">
+        <label><input type="checkbox" th:field="*{active}"> Активен</label>
+    </div>
+    <button type="submit" class="btn">Сохранить</button>
+    <a class="btn" th:href="@{/employees}">Отмена</a>
+</form>
+</body>
+</html>
+

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Учёт сотрудников</title>
+</head>
+<body>
+<h1>Учёт сотрудников</h1>
+<form class="filters" th:action="@{/employees}" method="get">
+  <input type="text" name="name" th:value="${name}" placeholder="Поиск по ФИО">
+  <select name="status">
+    <option value="all" th:selected="${status == 'all'}">Все</option>
+    <option value="active" th:selected="${status == 'active'}">Активные</option>
+    <option value="inactive" th:selected="${status == 'inactive'}">Неактивные</option>
+  </select>
+  <button type="submit" class="btn">Найти</button>
+  <a class="btn" th:href="@{/employees}">Сбросить</a>
+  <a class="btn" th:href="@{/employees/add}">+ Добавить сотрудника</a>
+</form>
+<table>
+  <thead>
+  <tr>
+    <th>ID</th>
+    <th>ФИО</th>
+    <th>Email</th>
+    <th>Телефон</th>
+    <th>Должность</th>
+    <th>Зарплата</th>
+    <th>Активен</th>
+    <th>Действия</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="e : ${employees}">
+    <td th:text="${e.id}"></td>
+    <td th:text="${e.fullName}"></td>
+    <td th:text="${e.email}"></td>
+    <td th:text="${e.phone}"></td>
+    <td th:text="${e.position}"></td>
+    <td th:text="${#numbers.formatDecimal(e.salary, 1, 'WHITESPACE', 2, 'COMMA')}"></td>
+    <td th:text="${e.active} ? 'Да' : 'Нет'"></td>
+    <td>
+      <a th:href="@{/employees/edit/{id}(id=${e.id})}">Изменить</a>
+      <form class="inline" th:action="@{/employees/delete/{id}(id=${e.id})}" method="post"
+            onsubmit="return confirm('Удалить сотрудника?');">
+        <button type="submit" class="btn btn-danger">Удалить</button>
+      </form>
+    </td>
+  </tr>
+  <tr th:if="${#lists.isEmpty(employees)}">
+    <td colspan="8" class="muted">Сотрудники не найдены</td>
+  </tr>
+  </tbody>
+</table>
+</body>
+</html>
